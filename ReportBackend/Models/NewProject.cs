@@ -11,5 +11,9 @@ namespace ReportBackend.Models
 
         public string Description { get; set; }
 
+        public string OverallPlan { get; set; }
+
+        public Guid UserId { get; set; }
+
     }
 }

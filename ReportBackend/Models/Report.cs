@@ -10,6 +10,8 @@ namespace ReportBackend.Models
 
         public string Description { get; set; }
 
+        public string NextPlan { get; set; }
+
         public int ReportCount { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }

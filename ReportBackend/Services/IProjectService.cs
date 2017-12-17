@@ -9,6 +9,6 @@ namespace ReportBackend.Services
     {
         Task<IEnumerable<Project>> GetOpenProjectAsync();
         Task<bool> AddProjectAsync(IEnumerable<NewProject> newProject);
-        Task<Project> GetProjectByIdAsync(Guid id);
+        Task<IEnumerable<Project>> GetProjectByIdAsync(Guid id);
     }
 }

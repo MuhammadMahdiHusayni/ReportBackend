@@ -33,6 +33,7 @@ namespace ReportBackend.Services
                 {
                     ProjectId = s.ProjectId,
                     Description = s.Description,
+                    NextPlan = s.NextPlan,
                     CreatedDate = DateTimeOffset.Now,
                     UpdatedDate = DateTimeOffset.Now,
                     ReportCount = count + 1

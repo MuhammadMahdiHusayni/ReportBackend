@@ -19,8 +19,9 @@ namespace ReportBackend.Services
 
         public async Task<IEnumerable<Project>> GetOpenProjectAsync()
         {
+            // need to check against user id
             return await _context.Projects
-                 .Where(x => x.IsOpen == true && x.Fk_UserId == 1)
+                 .Where(x => x.IsOpen == true)
                  .ToArrayAsync();
         }
 
@@ -33,10 +34,11 @@ namespace ReportBackend.Services
                     ProjectId = Guid.NewGuid(),
                     Title = s.Title,
                     Description = s.Description,
+                    OverallPlan = s.OverallPlan,
                     CreatedDate = DateTimeOffset.Now,
                     UpdatedDate = DateTimeOffset.Now,
                     IsOpen = true,
-                    Fk_UserId = 1
+                    UserId = s.UserId
 
                 };
                 _context.Projects.Add(entity);
@@ -45,11 +47,12 @@ namespace ReportBackend.Services
             return saveResult != 0;
         }
 
-        public async Task<Project> GetProjectByIdAsync(Guid id)
+        public async Task<IEnumerable<Project>> GetProjectByIdAsync(Guid id)
         {
+            // need to check against user id
             return await _context.Projects
-                 .Where(x => x.ProjectId == id && x.Fk_UserId == 1)
-                 .SingleOrDefaultAsync();
+                 .Where(x => x.UserId == id)
+                 .ToArrayAsync();
         }
     }
 }
