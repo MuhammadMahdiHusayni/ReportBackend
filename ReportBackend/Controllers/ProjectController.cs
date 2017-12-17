@@ -27,10 +27,10 @@ namespace ReportBackend.Controllers
         }
 
         // GET: api/Project/5
-        [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(Guid id)
+        [HttpGet("{email}", Name = "Get")]
+        public async Task<IActionResult> Get(string email)
         {
-            var project = await _projectService.GetProjectByIdAsync(id);
+            var project = await _projectService.GetProjectByEmailAsync(email);
             return Json(project);
         }
 

@@ -47,12 +47,23 @@ namespace ReportBackend.Services
             return saveResult != 0;
         }
 
-        public async Task<IEnumerable<Project>> GetProjectByIdAsync(Guid id)
+        public async Task<IEnumerable<Project>> GetProjectByEmailAsync(string email)
         {
-            // need to check against user id
-            return await _context.Projects
-                 .Where(x => x.UserId == id)
-                 .ToArrayAsync();
+            return await _context.Users
+                .Where(x => x.Email == email)
+                .Join(_context.Projects, u => u.UserId, p => p.UserId, (u, p) => new { u, p })
+                .Where(a => a.p.IsOpen == true)
+                .Select(m => m.p)
+                .ToListAsync();
+            //var user = await GetUserAsync(email);
+            //return await _context.Projects.Where(x => x.UserId == user.UserId).ToArrayAsync();
+        }
+
+        private async Task<User> GetUserAsync(string email)
+        {
+            return await _context.Users
+                 .Where(x => x.Email == email)
+                 .SingleOrDefaultAsync();
         }
     }
 }
