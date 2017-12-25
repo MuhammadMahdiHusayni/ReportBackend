@@ -2,6 +2,7 @@
 using ReportBackend.Data;
 using ReportBackend.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +35,12 @@ namespace ReportBackend.Services
             return await _context.Users
                  .Where(x => x.Email == email)
                  .SingleOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetAllUserAsync()
+        {
+            return await _context.Users
+                .ToListAsync();
         }
     }
 }

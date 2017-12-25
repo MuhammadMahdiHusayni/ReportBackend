@@ -1,5 +1,6 @@
 ﻿using ReportBackend.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ReportBackend.Services
@@ -8,5 +9,6 @@ namespace ReportBackend.Services
     {
         Task<bool> AddUserAsync(NewUser newUser);
         Task<User> GetUserAsync(string email);
+        Task<IEnumerable<User>> GetAllUserAsync();
     }
 }

@@ -5,19 +5,13 @@ using System.Threading.Tasks;
 
 namespace ReportBackend.Models
 {
-    public class User
+    public class Attendance
     {
-
         public Guid UserId { get; set; }
 
         public string Name { get; set; }
 
         public string Email { get; set; }
 
-        public string Role { get; set; }
-
-        public string Resource { get; set; }
-
-        public virtual ICollection<MeetingAttendance> MeetingAttendances { get; set; }
     }
 }

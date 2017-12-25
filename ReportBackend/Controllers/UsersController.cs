@@ -17,6 +17,13 @@ namespace ReportBackend.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllUser()
+        {
+            var user = await _userService.GetAllUserAsync();
+            return Json(user);
+        }
+
         [HttpGet("{email}")]
         public async Task<IActionResult> CheckUser(string email)
         {
