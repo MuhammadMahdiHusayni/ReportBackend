@@ -22,8 +22,7 @@ namespace ReportBackend.Controllers
             var project = await _projectService.GetOpenProjectAsync();
             return Json(project);
         }
-
-        // GET: api/Project/5
+        
         [HttpGet("{email}", Name = "Get")]
         public async Task<IActionResult> Get(string email)
         {
@@ -32,7 +31,7 @@ namespace ReportBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]IEnumerable<NewProject> newProject)
+        public async Task<IActionResult> CreateAsync([FromBody]NewProject newProject)
         {
             if (!ModelState.IsValid)
             {
@@ -45,19 +44,25 @@ namespace ReportBackend.Controllers
                 return BadRequest(new { error = "Could not add item." });
             }
 
-            return Ok();
+            return Ok(successful);
         }
 
-        // PUT: api/Project/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPost]
+        [Route("member")]
+        public async Task<IActionResult> AddMemberAsync([FromBody]IEnumerable<ProjectMember> newMember)
         {
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var successful = await _projectService.AddMemberAsync(newMember);
+            if (!successful)
+            {
+                return BadRequest(new { error = "Could not add item." });
+            }
+
+            return Ok(successful);
         }
     }
 }

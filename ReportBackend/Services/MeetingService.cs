@@ -86,7 +86,6 @@ namespace ReportBackend.Services
 
         private async Task<int> CreateMeeting(NewMeeting newMeeting)
         {
-
             var entity = new Meeting
             {
                 Title = newMeeting.Title,
@@ -146,52 +145,6 @@ namespace ReportBackend.Services
             }
             var saveResult = await _context.SaveChangesAsync();
             return saveResult != 0;
-        }
-
-        private bool saveUnusedCode()
-        {
-            // TODO create a single transaction
-            //var meetingEntity = new Meeting
-            //{
-            //    Title = newMeeting.Title,
-            //    Location = newMeeting.Location,
-            //    Note = newMeeting.Note,
-            //    DateTime = newMeeting.DateTime
-            //};
-            //_context.Meetings.Add(meetingEntity);
-
-            //foreach (NewAgenda s in newMeeting.Agenda)
-            //{
-            //    var entity = new Agenda
-            //    {
-            //        Description = s.Description
-            //    };
-            //    meetingEntity.Agendas.Add(entity);
-            //}
-
-            //foreach (NewAction s in newMeeting.Action)
-            //{
-            //    var entity = new Models.Action
-            //    {
-            //        Description = s.Description
-            //    };
-            //    meetingEntity.Actions.Add(entity);
-            //}
-
-            //foreach (Attendance s in newMeeting.Attendance)
-            //{
-            //    var entity = new MeetingAttendance
-            //    {
-            //        UserId = s.UserId
-            //    };
-            //    meetingEntity.MeetingAttendances.Add(entity);
-            //}
-
-            //var saveResult = await _context.SaveChangesAsync();
-            //return saveResult != 0;
-
-
-            return true;
         }
     }
 }

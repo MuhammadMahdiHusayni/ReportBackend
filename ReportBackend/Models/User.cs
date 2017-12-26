@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ReportBackend.Models
 {
@@ -14,10 +12,12 @@ namespace ReportBackend.Models
 
         public string Email { get; set; }
 
-        public string Role { get; set; }
-
-        public string Resource { get; set; }
-
         public virtual ICollection<MeetingAttendance> MeetingAttendances { get; set; }
+
+        public virtual ICollection<AcitivityAttendance> AcitivityAttendances { get; set; }
+
+        public virtual ICollection<UserResource> UserResources { get; set; }
+
+        public virtual ICollection<ProjectMember> ProjectMembers { get; set; }
     }
 }

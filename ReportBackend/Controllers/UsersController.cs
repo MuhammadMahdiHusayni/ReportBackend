@@ -48,7 +48,7 @@ namespace ReportBackend.Controllers
                 return BadRequest(new { error = "Could not add item." });
             }
 
-            return Ok();
+            return Ok(successful);
 
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ReportBackend.Models
 {
@@ -21,5 +22,7 @@ namespace ReportBackend.Models
         public Guid UserId { get; set; }
 
         public User User { get; set; }
+
+        public virtual ICollection<ProjectMember> ProjectMembers { get; set; }
     }
 }

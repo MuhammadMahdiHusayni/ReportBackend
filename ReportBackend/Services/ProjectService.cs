@@ -19,32 +19,29 @@ namespace ReportBackend.Services
 
         public async Task<IEnumerable<Project>> GetOpenProjectAsync()
         {
-            // need to check against user id
             return await _context.Projects
                  .Where(x => x.IsOpen == true)
                  .ToArrayAsync();
         }
 
-        public async Task<bool> AddProjectAsync(IEnumerable<NewProject> newProject)
+        public async Task<bool> AddProjectAsync(NewProject newProject)
         {
-            foreach (NewProject s in newProject)
+            bool saveResult = false;
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                var entity = new Project
+                try
                 {
-                    ProjectId = Guid.NewGuid(),
-                    Title = s.Title,
-                    Description = s.Description,
-                    OverallPlan = s.OverallPlan,
-                    CreatedDate = DateTimeOffset.Now,
-                    UpdatedDate = DateTimeOffset.Now,
-                    IsOpen = true,
-                    UserId = s.UserId
+                    var projectMember = await AddProject(newProject);
+                    saveResult = await AddMemberPrivate(projectMember);
 
-                };
-                _context.Projects.Add(entity);
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    // TODO: Handle failure
+                }
             }
-            var saveResult = await _context.SaveChangesAsync();
-            return saveResult != 0;
+            return saveResult;
         }
 
         public async Task<IEnumerable<Project>> GetProjectByEmailAsync(string email)
@@ -55,8 +52,22 @@ namespace ReportBackend.Services
                 .Where(a => a.p.IsOpen == true)
                 .Select(m => m.p)
                 .ToListAsync();
-            //var user = await GetUserAsync(email);
-            //return await _context.Projects.Where(x => x.UserId == user.UserId).ToArrayAsync();
+        }
+
+        public async Task<bool> AddMemberAsync(IEnumerable<ProjectMember> newMember)
+        {
+            foreach (ProjectMember s in newMember)
+            {
+                var entity = new ProjectMember
+                {
+                    ProjectId = s.ProjectId,
+                    UserId = s.UserId,
+                    ProjectPositionCode = s.ProjectPositionCode
+                };
+                _context.ProjectMembers.Add(entity);
+            }
+            var saveResult = await _context.SaveChangesAsync();
+            return saveResult != 0;
         }
 
         private async Task<User> GetUserAsync(string email)
@@ -64,6 +75,43 @@ namespace ReportBackend.Services
             return await _context.Users
                  .Where(x => x.Email == email)
                  .SingleOrDefaultAsync();
+        }
+
+        private async Task<ProjectMember> AddProject(NewProject newProject)
+        {
+            var entity = new Project
+            {
+                ProjectId = Guid.NewGuid(),
+                Title = newProject.Title,
+                Description = newProject.Description,
+                OverallPlan = newProject.OverallPlan,
+                CreatedDate = DateTimeOffset.Now,
+                UpdatedDate = DateTimeOffset.Now,
+                IsOpen = true,
+                UserId = newProject.UserId
+
+            };
+            _context.Projects.Add(entity);
+            var saveResult = await _context.SaveChangesAsync();
+            return new ProjectMember
+            {
+                UserId = newProject.UserId,
+                ProjectId = entity.ProjectId
+            };
+        }
+
+        private async Task<bool> AddMemberPrivate(ProjectMember projectMember)
+        {
+            var entity = new ProjectMember
+            {
+                ProjectId = projectMember.ProjectId,
+                UserId = projectMember.UserId,
+                ProjectPositionCode = "001"
+
+            };
+            _context.ProjectMembers.Add(entity);
+            var saveResult = await _context.SaveChangesAsync();
+            return saveResult != 0;
         }
     }
 }

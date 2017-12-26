@@ -11,9 +11,10 @@ using System;
 namespace ReportBackend.Migrations
 {
     [DbContext(typeof(ReportingContext))]
-    partial class ReportingContextModelSnapshot : ModelSnapshot
+    [Migration("20171226103536_AddActivityTransaction")]
+    partial class AddActivityTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
