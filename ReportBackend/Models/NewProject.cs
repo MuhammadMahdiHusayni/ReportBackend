@@ -14,6 +14,10 @@ namespace ReportBackend.Models
         public string OverallPlan { get; set; }
 
         public Guid UserId { get; set; }
-
+        public Guid ProjectId { get; internal set; }
+        public DateTimeOffset CreatedDate { get; internal set; }
+        public DateTimeOffset UpdatedDate { get; internal set; }
+        public bool IsOpen { get; internal set; }
+        public IEnumerable<NewProjectMember> NewProjectMembers { get; internal set; }
     }
 }

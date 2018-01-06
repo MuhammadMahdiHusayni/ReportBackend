@@ -24,14 +24,14 @@ namespace ReportBackend.Controllers
 
         [HttpPost]
         [Route("new")]
-        public async Task<IActionResult> CreateAsync([FromBody]Activity activity)
+        public async Task<IActionResult> CreateAsync([FromBody]NewActivity newActivity)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var successful = await _activityService.AddActivityAsync(activity);
+            var successful = await _activityService.AddActivityAsync(newActivity);
             if (!successful)
             {
                 return BadRequest(new { error = "Could not add item." });

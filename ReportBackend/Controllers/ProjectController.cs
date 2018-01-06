@@ -49,7 +49,7 @@ namespace ReportBackend.Controllers
 
         [HttpPost]
         [Route("member")]
-        public async Task<IActionResult> AddMemberAsync([FromBody]IEnumerable<ProjectMember> newMember)
+        public async Task<IActionResult> AddMemberAsync([FromBody]IEnumerable<NewProjectMember> newMember)
         {
             if (!ModelState.IsValid)
             {

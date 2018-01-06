@@ -19,6 +19,8 @@ namespace ReportBackend.Models
 
         public string DepartmentCode { get; set; }
 
-        public IEnumerable<User> User { get; set; }
+        public Guid UserId { get; set; }
+
+        public int TreasuryId { get; set; }
     }
 }

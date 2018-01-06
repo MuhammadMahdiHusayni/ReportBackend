@@ -6,7 +6,7 @@ namespace ReportBackend.Services
 {
     public interface IActivityService
     {
-        Task<bool> AddActivityAsync(Activity activity);
-        Task<IEnumerable<Activity>> GetAllActivityAsync();
+        Task<bool> AddActivityAsync(NewActivity newActivity);
+        Task<IEnumerable<NewActivity>> GetAllActivityAsync();
     }
 }

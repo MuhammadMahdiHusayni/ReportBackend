@@ -3,6 +3,7 @@ using ReportBackend.Data;
 using ReportBackend.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ReportBackend.Services
 {
@@ -15,30 +16,54 @@ namespace ReportBackend.Services
             _context = context;
         }
 
-        public async Task<bool> AddTransactionAsync(IEnumerable<Transaction> transaction)
+        public async Task<bool> AddTransactionAsync(IEnumerable<NewTransaction> transaction)
         {
-            foreach(Transaction t in transaction)
+
+            foreach(NewTransaction t in transaction)
             {
-                var entity = new Transaction
+                var treasury = _context.Treasuries.Where(x => x.TreasuryId == t.TreasuryId).FirstOrDefault();
+                if(treasury != null)
                 {
-                    UserId = t.UserId,
-                    TransactionDate = t.TransactionDate,
-                    Amount = t.Amount,
-                    Note = t.Note,
-                    TransactionTypeCode = t.TransactionTypeCode,
-                    DepartmentCode = t.DepartmentCode
-                };
-                _context.Transactions.Add(entity);
+                    if(t.TransactionTypeCode == "01")
+                    {
+                        treasury.AccountBalance = treasury.AccountBalance + t.Amount;
+                    }else if(t.TransactionTypeCode == "02")
+                    {
+                        treasury.AccountBalance = treasury.AccountBalance - t.Amount;
+                    }
+                    _context.Treasuries.Update(treasury);
+
+                    var entity = new Transaction
+                    {
+                        UserId = t.UserId,
+                        TransactionDate = t.TransactionDate,
+                        Amount = t.Amount,
+                        Note = t.Note,
+                        TransactionTypeCode = t.TransactionTypeCode,
+                        DepartmentCode = t.DepartmentCode,
+                        TreasuryId = t.TreasuryId
+                    };
+                    _context.Transactions.Add(entity);
+                }                
             }
-            
             var result = await _context.SaveChangesAsync();
             return result != 0;
         }
 
-        public async Task<IEnumerable<Transaction>> GetAllTransactionAsync()
+        public async Task<IEnumerable<NewTransaction>> GetAllTransactionAsync()
         {
-            return await _context.Transactions
-                .ToListAsync();
+            return await (from t in _context.Transactions
+                          select new NewTransaction
+                          {
+                              TransactionId = t.TransactionId,
+                              TransactionDate = t.TransactionDate,
+                              Amount = t.Amount,
+                              Note = t.Note,
+                              TransactionTypeCode = t.TransactionTypeCode,
+                              DepartmentCode = t.DepartmentCode,
+                              UserId = t.UserId,
+                              TreasuryId = t.TreasuryId
+                          }).ToListAsync();
         }
 
         public async Task<bool> AddAccountAsync(Treasury treasury)

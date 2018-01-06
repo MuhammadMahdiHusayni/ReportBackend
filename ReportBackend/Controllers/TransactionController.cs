@@ -25,7 +25,7 @@ namespace ReportBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]IEnumerable<Transaction> transaction)
+        public async Task<IActionResult> CreateAsync([FromBody]IEnumerable<NewTransaction> transaction)
         {
             if (!ModelState.IsValid)
             {

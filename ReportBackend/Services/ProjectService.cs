@@ -44,19 +44,41 @@ namespace ReportBackend.Services
             return saveResult;
         }
 
-        public async Task<IEnumerable<Project>> GetProjectByEmailAsync(string email)
+        public async Task<IEnumerable<NewProject>> GetProjectByEmailAsync(string email)
         {
-            return await _context.Users
-                .Where(x => x.Email == email)
-                .Join(_context.Projects, u => u.UserId, p => p.UserId, (u, p) => new { u, p })
-                .Where(a => a.p.IsOpen == true)
-                .Select(m => m.p)
-                .ToListAsync();
+            return await (from u in _context.Users
+                          where u.Email.Equals(email)
+                          join p in _context.Projects
+                          on u.UserId equals p.UserId
+                          select new NewProject
+                          {
+                              ProjectId = p.ProjectId,
+                              Title = p.Title,
+                              Description = p.Description,
+                              OverallPlan = p.OverallPlan,
+                              IsOpen = p.IsOpen,
+                              UserId = p.UserId,
+                              NewProjectMembers = (from pm in _context.ProjectMembers
+                                                where pm.ProjectId == p.ProjectId
+                                                select new NewProjectMember
+                                                {
+                                                    UserId = pm.UserId,
+                                                    ProjectId = pm.ProjectId,
+                                                    ProjectPositionCode = pm.ProjectPositionCode
+                                                })
+                          }).ToListAsync();
+            //return await _context.Users
+            //    .Where(x => x.Email == email)
+            //    .Join(_context.Projects, u => u.UserId, p => p.UserId, (u, p) => new { u, p })
+            //    .Where(a => a.p.IsOpen == true)
+            //    .Join(_context.ProjectMembers, )
+            //    .Select(m => m.p)
+            //    .ToListAsync();
         }
 
-        public async Task<bool> AddMemberAsync(IEnumerable<ProjectMember> newMember)
+        public async Task<bool> AddMemberAsync(IEnumerable<NewProjectMember> newMember)
         {
-            foreach (ProjectMember s in newMember)
+            foreach (NewProjectMember s in newMember)
             {
                 var entity = new ProjectMember
                 {

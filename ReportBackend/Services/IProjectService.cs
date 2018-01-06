@@ -9,7 +9,7 @@ namespace ReportBackend.Services
     {
         Task<IEnumerable<Project>> GetOpenProjectAsync();
         Task<bool> AddProjectAsync(NewProject newProject);
-        Task<IEnumerable<Project>> GetProjectByEmailAsync(string email);
-        Task<bool> AddMemberAsync(IEnumerable<ProjectMember> newMember);
+        Task<IEnumerable<NewProject>> GetProjectByEmailAsync(string email);
+        Task<bool> AddMemberAsync(IEnumerable<NewProjectMember> newMember);
     }
 }

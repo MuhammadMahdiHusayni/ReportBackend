@@ -30,6 +30,8 @@ namespace ReportBackend
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMeetingService, MeetingService>();
+            services.AddScoped<IActivityService, ActivityService>();
+            services.AddScoped<ITransactionService, TransactionService>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
